@@ -1,5 +1,17 @@
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+
 const calculateHash = async () => {
-  // Write your code here
+    const filePath = path.resolve('./src/hash/files/fileToCalculateHashFor.txt');
+    const hash = crypto.createHash('sha256');
+    const stream = fs.createReadStream(filePath);
+
+    stream.on('data', data => hash.update(data));
+    stream.on('end', () => console.log(hash.digest('hex')));
+    stream.on('error', () => {
+        throw new Error('FS operation failed');
+    });
 };
 
 await calculateHash();
